@@ -1,0 +1,21 @@
+<%- include("header.ejs") -%>
+
+<table>
+    <tr>
+        <th>Name</th>
+        <th>Password</th>
+    </tr>
+    <%- if(users.length > 0) { -%>
+        <%- users.forEach( item => { -%>
+            <tr>
+                <td><%- item.name -%></td>
+                <td><%- item.password -%></td>
+            </tr>
+        <%- }) -%>
+    <%- } -%>
+    <%- else { -%>
+        <tr>
+            <td colspan="2">Not users found</td>
+        </tr>
+    <%- } -%>
+</table>
