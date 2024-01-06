@@ -36,6 +36,7 @@ class UserController {
         try {
             const user = await User.generalGetUser({ name });
             if (user.length > 0) {
+                console.log(JSON.stringify(user));
                 res.status(200).json(user);
             } else {
                 res.status(404).send("Not found");
