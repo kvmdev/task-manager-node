@@ -7,10 +7,9 @@
   "name": "task-manager-node",
   "version": "1.0.0",
   "main": "index.js",
-  "devDependencies": {},
   "scripts": {
-    "start" : "node main.js",
-    "dev" : "node --watch main.js"
+    "start": "node main.js",
+    "dev": "node --watch main.js"
   },
   "keywords": [],
   "author": "",
