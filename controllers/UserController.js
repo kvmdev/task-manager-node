@@ -75,7 +75,7 @@ class UserController {
     }
 
     static async deleteUser(req, res) {
-        const { id } = req.params;
+        const { id } = req.body;
         try {
             const user = await User.deleteUser(id);
             if (user.affectedRows > 0) {
