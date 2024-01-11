@@ -1,18 +1,10 @@
-const { UserController } = require("../controllers/UserController");
-
 const router = require("express").Router();
+const { PagesController } = require("../controllers/PagesController");
 
-router.get("/", async (req, res) => {
-    try {
-        const users = await UserController.getAllUsers();
-        if(users) {
-            res.render("index", { users });
-        } else {
-            res.render("index", { users: [] });
-        }
-    } catch(e) {
-        res.status(500).send("Internal server error");
-    }
-});
+router.get("/", PagesController.getAllUsers);
+router.get("/update", PagesController.updateUserPage);
+router.get("/create", PagesController.createUserPage);
+router.get("/delete", PagesController.deleteUserPage);
+router.get("/:id", PagesController.getUserById);    
 
 module.exports = router;
