@@ -1,19 +1,21 @@
 <%- include("partials/header.ejs") %>
 
-<h1>Update user</h1>
+<div class="content-container">
+    <h1>Update user</h1>
 
-<form id="form">
-    <label for="id">ID</label>
-    <input type="text" name="id" id="id" required>
+    <form id="form" class="user-form">
+        <label for="id">ID</label>
+        <input type="text" name="id" id="id" required>
 
-    <label for="name">Name</label>
-    <input type="text" name="name" id="name" required>
+        <label for="name">Name</label>
+        <input type="text" name="name" id="name" required>
 
-    <label for="password">Password</label>
-    <input type="password" name="password" id="password" required>
+        <label for="password">Password</label>
+        <input type="password" name="password" id="password" required>
 
-    <input type="submit" value="Update">
-</form>
+        <input type="submit" value="Update">
+    </form>
+</div>
 
 <script>
     document.getElementById("form").addEventListener("submit", (event) => {

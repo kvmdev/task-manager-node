@@ -1,23 +1,31 @@
 <%- include("partials/header.ejs") %>
 
-<h1>Create new user</h1>
+<div class="content-container">
+    <h1>Create new user</h1>
 
-<form id="form">
-    <label for="name">Name</label>
-    <input type="text" name="name" id="name" required>
+    <form id="form" class="user-form">
+        <label for="name">Name</label>
+        <input type="text" name="name" id="name" required>
 
-    <label for="password">Password</label>
-    <input type="password" name="password" id="password" required>
+        <label for="password">Password</label>
+        <input type="password" name="password" id="password" required>
 
-    <input type="submit" value="Create">
-</form>
+        <p id="message" class="hide"></p>
+
+        <input type="submit" value="Create">
+    </form>
+</div>
 
 <script>
     document.getElementById("form").addEventListener("submit", (event) => {
         event.preventDefault();
         const data = {};
-        data.name = document.getElementById("name").value;
-        data.password = document.getElementById("password").value;
+        const name = document.getElementById("name");
+        const password = document.getElementById("password");
+
+        data.name = name.value;
+        data.password = password.value;
+        const message = document.getElementById("message");
         
         fetch("/api/users", {
             method: "POST",
@@ -28,9 +36,18 @@
             }
         }).then(response => {
             if (response.ok) {
-                window.location.href = "/";
+                /* window.location.href = "/"; */
+                message.textContent = "Created successfully";
+                message.classList.remove("error");
+                message.classList.add("show", "success");
+                name.value = "";
+                password.value = "";
             } else {
-                alert("Failed to create user");
+                message.textContent = "Error creating user";
+                message.classList.remove("success");
+                message.classList.add("show", "error");
+                name.value = "";
+                password.value = "";
             }
         }).catch(error => {
             alert("Failed to create user");

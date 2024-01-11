@@ -5,7 +5,7 @@
     </div>
     <% if (users.length> 0) { %>
         <% users.forEach(user=> { %>
-            <div class="info">
+            <div class="info" data-userid="<%= user.id %>">
                 <span>
                     <%= user.id %>
                 </span>
@@ -13,10 +13,32 @@
                     <%= user.name %>
                 </span>
             </div>
-        <% }); %>
-        <% } else { %>
-                <div>
-                    <span>No users found</span>
-                </div>
-        <% } %>
+            <% }); %>
+                <% } else { %>
+                    <div class="info">
+                        <span>No users found</span>
+                    </div>
+                    <% } %>
 </div>
+
+<form id="form" class="form-get">
+    <input type="text" id="id">
+    <input type="submit" value="Search">
+</form>
+
+<script>
+
+    document.getElementById("form").addEventListener("submit", (e) => {
+        e.preventDefault();
+        const expectedId = document.getElementById("id").value;
+        const infos = document.querySelectorAll(".info");
+        infos.forEach(info => {
+            let userId = info.dataset.userid;
+            if(userId == expectedId || expectedId == "") {
+                info.style.display = "flex";
+            } else {
+                info.style.display = "none";
+            }
+        });
+    }); 
+</script>

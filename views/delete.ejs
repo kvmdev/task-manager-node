@@ -1,10 +1,12 @@
 <%- include("partials/header.ejs") %>
 
-<form id="form">
-    <label for="id">ID</label>
-    <input type="text" id="id">
-    <input type="submit" value="Delete">
-</form>
+<div class="content-container">
+    <form id="form" class="user-form">
+        <label for="id">ID</label>
+        <input type="text" id="id">
+        <input type="submit" value="Delete">
+    </form>
+</div>
 
 <script>
     document.getElementById("form").addEventListener("submit", (e)=>{
