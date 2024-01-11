@@ -1,0 +1,45 @@
+<%- include("partials/header.ejs") %>
+
+<h1>Update user</h1>
+
+<form id="form">
+    <label for="id">ID</label>
+    <input type="text" name="id" id="id" required>
+
+    <label for="name">Name</label>
+    <input type="text" name="name" id="name" required>
+
+    <label for="password">Password</label>
+    <input type="password" name="password" id="password" required>
+
+    <input type="submit" value="Update">
+</form>
+
+<script>
+    document.getElementById("form").addEventListener("submit", (event) => {
+        event.preventDefault();
+        const data = {};
+        data.id = document.getElementById("id").value;
+        data.name = document.getElementById("name").value;
+        data.password = document.getElementById("password").value;
+
+        fetch("/api/users", {
+            method: "PUT",
+            body: JSON.stringify(data),
+            headers: {
+                "Content-Type": "application/json"
+            }
+        }).then(response => {
+            if (response.ok) {
+                alert("Updated successfully");
+                window.location.href = "/";
+            } else {
+                alert("Failed to update user");
+            }
+        }).catch(error => {
+            alert("Failed to update user");
+        });
+    });
+</script>
+
+<%- include("partials/footer.ejs") %>

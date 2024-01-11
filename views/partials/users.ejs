@@ -1,21 +1,22 @@
-<%- include("header.ejs") -%>
-
-<table>
-    <tr>
-        <th>Name</th>
-        <th>Password</th>
-    </tr>
-    <%- if(users.length > 0) { -%>
-        <%- users.forEach( item => { -%>
-            <tr>
-                <td><%- item.name -%></td>
-                <td><%- item.password -%></td>
-            </tr>
-        <%- }) -%>
-    <%- } -%>
-    <%- else { -%>
-        <tr>
-            <td colspan="2">Not users found</td>
-        </tr>
-    <%- } -%>
-</table>
+<div class="info-container">
+    <div class="header">
+        <span>ID</span>
+        <span>Name</span>
+    </div>
+    <% if (users.length> 0) { %>
+        <% users.forEach(user=> { %>
+            <div class="info">
+                <span>
+                    <%= user.id %>
+                </span>
+                <span>
+                    <%= user.name %>
+                </span>
+            </div>
+        <% }); %>
+        <% } else { %>
+                <div>
+                    <span>No users found</span>
+                </div>
+        <% } %>
+</div>

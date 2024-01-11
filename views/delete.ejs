@@ -1,0 +1,35 @@
+<%- include("partials/header.ejs") %>
+
+<form id="form">
+    <label for="id">ID</label>
+    <input type="text" id="id">
+    <input type="submit" value="Delete">
+</form>
+
+<script>
+    document.getElementById("form").addEventListener("submit", (e)=>{
+        e.preventDefault();
+        const data = {};
+        const id = document.getElementById("id").value;
+        data.id = id;
+        fetch("/api/users", {
+            method: "DELETE",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(data)
+        })
+        .then(res => {
+            if(res.ok) {
+                alert("Deleted successfully");
+                window.location.href = "/";
+            } else {
+                alert("Couldn`t delete");
+            }
+        }).catch(e => {
+            alert("Server error");
+        });
+    })
+</script>
+
+<%- include("partials/footer.ejs") %>
