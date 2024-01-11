@@ -15,7 +15,7 @@ class PagesController {
     }
 
     static async getUserById(req, res){
-        const { id } = req.params;
+        const { id } = req.body;
         try {
             const user = await User.getUserById(id);
             res.render("index", { users: user });
