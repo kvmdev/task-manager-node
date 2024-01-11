@@ -3,22 +3,19 @@
         <span>ID</span>
         <span>Name</span>
     </div>
-    <% if (users.length> 0) { %>
-        <% users.forEach(user=> { %>
+    <% if (users.length > 0) { %>
+        <% users.forEach(user => { %>
             <div class="info" data-userid="<%= user.id %>">
-                <span>
-                    <%= user.id %>
-                </span>
-                <span>
-                    <%= user.name %>
-                </span>
+                <span><%= user.id %></span>
+                <span><%= user.name %></span>
             </div>
-            <% }); %>
-                <% } else { %>
-                    <div class="info">
-                        <span>No users found</span>
-                    </div>
-                    <% } %>
+        <% }); %>
+    <% } else { %>
+        <div class="info">
+            <span>No users found</span>
+        </div>
+    <% } %>
+    <p id="message" class="notfound hide">Not found</p>
 </div>
 
 <form id="form" class="form-get">
@@ -27,18 +24,30 @@
 </form>
 
 <script>
-
     document.getElementById("form").addEventListener("submit", (e) => {
         e.preventDefault();
-        const expectedId = document.getElementById("id").value;
+        const expectedId = document.getElementById("id").value.trim();
         const infos = document.querySelectorAll(".info");
+        const message = document.getElementById("message");
+
+        let foundMatch = false;
+
         infos.forEach(info => {
-            let userId = info.dataset.userid;
-            if(userId == expectedId || expectedId == "") {
+            const userId = info.dataset.userid;
+            if (userId === expectedId || expectedId === "") {
                 info.style.display = "flex";
+                foundMatch = true;
             } else {
                 info.style.display = "none";
             }
         });
-    }); 
+
+        if (foundMatch) {
+            message.classList.remove("show");
+            message.classList.add("hide");
+        } else {
+            message.classList.remove("hide");
+            message.classList.add("show");
+        }
+    });
 </script>
