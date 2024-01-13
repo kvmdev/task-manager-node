@@ -1,0 +1,117 @@
+<%- include("partials/header.ejs") %>
+
+    <div class="w-full min-h-screen bg-gray-100 dark:bg-gray-900 p-6">
+        <div class="flex items-center justify-center h-full">
+            <form class="w-full max-w-md p-6 bg-white dark:bg-gray-800 shadow-md rounded-md" id="form">
+                <h2 class="text-xl font-bold text-gray-800 dark:text-gray-200 mb-4">Register</h2>
+                <div class="space-y-4">
+                    <div class="space-y-2">
+                        <label
+                            class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                            for="registerName">
+                            Name
+                        </label>
+                        <input
+                            class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                            id="registerName" placeholder="Enter your name" type="text" required />
+                    </div>
+                    <div class="space-y-2">
+                        <label
+                            class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                            for="registerPassword">
+                            Password
+                        </label>
+                        <input
+                            class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                            id="registerPassword" placeholder="Enter your password" type="password" required />
+                    </div>
+                    <div class="space-y-2">
+                        <label
+                            class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                            for="registerConfirmPassword">
+                            Confirm Password
+                        </label>
+                        <input
+                            class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                            id="registerConfirmPassword" placeholder="Confirm your password" type="password"
+                            onchange="(e)=> {console.log(e.target.value)}" required />
+                        <p class="match-p hidden" id="message">Doesn`t match</p>
+                        <p class="match-p-ok hidden" id="message-ok"></p>
+                    </div>
+                    <button
+                        class="inline-flex items-center justify-center rounded-md text-2xl bg-gray-300 font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2 w-full">
+                        Register
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        function $(e) {
+            return document.querySelector(e);
+        }
+        let equals = false;
+        let ok = false;
+        const registerConfirmPassword = $("input#registerConfirmPassword");
+        const registerName = $("#registerName");
+        const registerPassword = $("#registerPassword");
+        const message = $("#message");
+        const messageOk = $("p#message-ok");
+
+        registerConfirmPassword.addEventListener("input", (e) => {
+            
+            if (e.target.value == registerPassword.value) {
+                equals = true;
+                if (!message.classList.contains("hidden")) {
+                    message.classList.add("hidden");
+                    message.classList.remove("show");
+                }
+            }
+            else {
+                equals = false;
+                if (!message.classList.contains("show")) {
+                    message.classList.add("show");
+                    message.classList.remove("hidden");
+                }
+            }
+        });
+
+        $("#form").addEventListener("submit", async (e) => {
+            e.preventDefault();
+            let data = {
+                name: registerName.value,
+                password: registerPassword.value
+            };
+
+            if (equals) {
+                const response = await fetch("/api/users", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(data)
+                });
+                if(response.ok) {
+                    messageOk.textContent = "Created successfully";
+                    if(messageOk.classList.contains("hidden")) {
+                        messageOk.classList.add("show");
+                        messageOk.classList.remove("hidden");
+                    }
+                } else {
+                    messageOk.textContent = "Couldn`t create user";
+                    if(messageOk.classList.contains("hidden")) {
+                        messageOk.classList.add("show");
+                        messageOk.classList.remove("hidden");
+                    }
+                }
+                console.log(await response.json());
+
+                registerName.textContent = "";
+                registerPassword.textContent = "";
+                registerConfirmPassword.textContent = "";
+            }
+        });
+    </script>
+
+    <%- include("partials/footer.ejs") %>
