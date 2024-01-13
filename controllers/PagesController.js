@@ -14,16 +14,6 @@ class PagesController {
         }
     }
 
-    static async getUserById(req, res){
-        const { id } = req.body;
-        try {
-            const user = await User.getUserById(id);
-            res.render("index", { users: user });
-        } catch (e) {
-            res.status(500).send("Internal server error");
-        }
-    }
-
     static createUserPage(req, res) {
         res.render("create");
     }
@@ -34,6 +24,14 @@ class PagesController {
 
     static deleteUserPage(req, res) {
         res.render("delete");
+    }
+
+    static loginPage(req, res){
+        res.render("login");
+    }
+
+    static registerPage(req, res) {
+        res.render("register");
     }
 }
 
