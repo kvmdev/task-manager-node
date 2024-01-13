@@ -1,29 +1,21 @@
-<div class="info-container">
-    <div class="header">
-        <span>ID</span>
-        <span>Name</span>
+<section class="p-6">
+    <h2 class="text-2xl font-bold text-black-800 mb-4">User List</h2>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <% if(users.length > 0) { %>
+            <% users.forEach( (user)=> { %>
+                <div class="p-4 bg-white dark:bg-gray-800 shadow-md rounded-md">
+                    <h3 class="text-lg font-bold text-gray-800 dark:text-gray-200 mb-2">User ID: <%= user.id %></h3>
+                    <p class="text-gray-600 dark:text-gray-400">Name: <%= user.name %></p>
+                    <p class="text-gray-600 dark:text-gray-400">Password: <%= user.password %></p>
+                </div>
+            <% }) %>
+            <% } else { %>
+                <span>Not found</span>
+            <% } %>
     </div>
-    <% if (users.length > 0) { %>
-        <% users.forEach(user => { %>
-            <div class="info" data-userid="<%= user.id %>">
-                <span><%= user.id %></span>
-                <span><%= user.name %></span>
-            </div>
-        <% }); %>
-    <% } else { %>
-        <div class="info">
-            <span>No users found</span>
-        </div>
-    <% } %>
-    <p id="message" class="notfound hide">Not found</p>
-</div>
+</section>
 
-<form id="form" class="form-get">
-    <input type="text" id="id">
-    <input type="submit" value="Search">
-</form>
-
-<script>
+<!-- <script>
     document.getElementById("form").addEventListener("submit", (e) => {
         e.preventDefault();
         const expectedId = document.getElementById("id").value.trim();
@@ -50,4 +42,4 @@
             message.classList.add("show");
         }
     });
-</script>
+</script> -->
