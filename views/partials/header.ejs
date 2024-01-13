@@ -4,7 +4,23 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Express</title>
-    <link rel="stylesheet" href="/styles/styles.css">  
+    <link rel="stylesheet" href="/styles/styles.css"> 
+    <script src="https://cdn.tailwindcss.com"></script> 
+    <style>
+      h1:hover {
+        cursor: pointer;
+      }
+    </style>
 </head>
 <body>
-    <h1><strong>Kevin Vazquez`s </strong>project</h1>
+    <nav class="top-0 flex items-center justify-between p-6 bg-white dark:bg-gray-800" id="nav">
+        <a href="/"><h1 class="text-2xl font-bold text-gray-800 dark:text-gray-200">Task Manager</h1></a>
+        <div class="space-x-4">
+          <button class="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 h-10 px-4 py-2 bg-transparent border border-gray-800 dark:border-gray-200 text-gray-800 dark:text-gray-200 hover:bg-gray-800 hover:text-white dark:hover:bg-gray-200 dark:hover:text-gray-800" data-method="/login">
+            Log In
+          </button>
+          <button class="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 h-10 px-4 py-2 bg-gray-800 text-white dark:bg-gray-200 dark:text-gray-800 hover:bg-gray-700 hover:text-white dark:hover:bg-gray-300" data-method="/register">
+            Register
+          </button>
+        </div>
+      </nav>
