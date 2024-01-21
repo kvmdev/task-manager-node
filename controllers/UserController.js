@@ -1,3 +1,4 @@
+const { hashPassword, comparePassword, createToken } = require("../middlewares/authMiddleware");
 const { User } = require("../models/User");
 
 class UserController {
@@ -48,10 +49,21 @@ class UserController {
 
     static async createUser(req, res) {
         try {
-            const { name, password } = req.body;
-            const user = await User.createUser({ name, password });
-            if (user.affectedRows > 0) {
-                res.status(201).json(user);
+            let { name, password } = req.body;
+            password = await hashPassword(password);
+            const createdUser = await User.createUser({ name, password });
+            if (createdUser.affectedRows > 0) {
+                const user = await User.getUserByUserName({ name });
+                
+                const data = {
+                    name: user[0].name,
+                    isAdmin: user[0].isAdmin
+                };
+
+                const token = createToken(data);
+
+                req.session.isAuthenticated = true;
+                res.status(201).json({ token });
             } else {
                 res.status(404).send("User not created");
             }
@@ -87,6 +99,39 @@ class UserController {
             res.status(500).send("Internal server error");
         }
     }
+
+    static async login(req, res) {
+        try {
+            const { name, password } = req.body;
+            const user = await User.getUserByUserName({ name });
+            
+            if(user.length > 0) {
+                const isMatch = await comparePassword(password, user[0].password);
+                
+                if(isMatch) {
+                    const userToToken = {
+                        name: user[0].name,
+                        isAdmin: user[0].isAdmin
+                    };
+
+                    const token = createToken(userToToken);
+
+                    req.session.isAuthenticated = true;
+                    res.json({ token });
+                } else {
+                    req.session.isAuthenticated = false;
+                    res.status(401).json({message: "Invalid credentials"});
+                }
+            } else {
+                req.session.isAuthenticated = false;
+                res.status(404).json({message: "User not found"});
+            }
+        } catch(e) {
+            req.session.isAuthenticated = false;
+            res.status(500).json({ message: "Internal server error" });
+        }
+    }
+
 }
 
 module.exports = { UserController };

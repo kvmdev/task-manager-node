@@ -1,21 +1,22 @@
-<%- include("partials/header.ejs") %>
+<%- include("partials/header.ejs", { isAuthenticated }) %>
 
 <div class="w-full min-h-screen bg-gray-100 dark:bg-gray-900 p-6">
     <main class="flex items-center justify-center h-full">
-      <div class="w-full max-w-md p-6 bg-white dark:bg-gray-800 shadow-md rounded-md">
+      <form class="w-full max-w-md p-6 bg-white dark:bg-gray-800 shadow-md rounded-md">
         <h2 class="text-xl font-bold text-gray-800 dark:text-gray-200 mb-4">Login</h2>
         <div class="space-y-4">
           <div class="space-y-2">
             <label
               class=" font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-white-300"
               for="loginEmail">
-              Email
+              Name
             </label>
             <input
               class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-              id="loginEmail"
-              placeholder="Enter your email"
-              type="email"
+              id="loginName"
+              placeholder="Enter your name"
+              type="text"
+              required
             />
           </div>
           <div class="space-y-2">
@@ -30,14 +31,50 @@
               id="loginPassword"
               placeholder="Enter your password"
               type="password"
+              required
             />
           </div>
+          <p id="message"></p>
           <button class="inline-flex items-center justify-center rounded-md text-2xl bg-gray-300 font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 w-full">
             Login
           </button>
         </div>
-      </div>
+      </form>
     </main>
   </div>
+
+  <script>
+    function $(e) {
+      return document.querySelector(e);
+    }
+    const name = $("#loginName");
+    const password = $("#loginPassword");
+    const message = $("#message");
+
+    $("form").addEventListener("submit", async (e)=> {
+      e.preventDefault();
+    
+      const response = await fetch("/api/users/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ name: name.value, password: password.value})
+      });
+
+      const data = await response.json();
+
+      console.log(response.status);
+
+      if(response.ok) {
+        localStorage.setItem("token", data.token);
+        window.location.href = "/";
+      } else if(response.status == 500){
+        message.textContent = "Server error";
+      } else {
+        message.textContent = "Invalid credentials";
+      }
+    });
+  </script>
 
 <%- include("partials/footer.ejs") %>
