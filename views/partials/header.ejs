@@ -11,6 +11,21 @@
         cursor: pointer;
       }
     </style>
+    <script>
+      document.addEventListener("DOMContentLoaded", (e)=> {
+        const buttonLogout = document.querySelector("#button-logout");
+        buttonLogout.addEventListener("click", async ()=> {
+          const response = await fetch("/logout");
+          const data = await response.json();
+          if(response.ok) {
+            window.location.href = "/";
+          } else {
+            alert("Couldn`t delete session");
+            console.log(data);
+          }
+        });
+      });
+    </script>
 </head>
 <body>
     <nav class="top-0 flex items-center justify-between p-6 bg-white dark:bg-gray-800" id="nav">
@@ -26,7 +41,7 @@
           </div>
         <%  } else { %>
           <div class="space-x-4">
-            <input class="inline-flex items-center justify-center rounded-md text-sm text-center font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 h-10 px-4 py-2 bg-gray-800 text-white dark:bg-gray-200 dark:text-gray-800 hover:bg-gray-700 hover:text-white dark:hover:bg-gray-300" value="Logout" onclick="()=> console.log('pego');">
+            <input class="inline-flex items-center justify-center rounded-md text-sm text-center font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 h-10 px-4 py-2 bg-gray-800 text-white dark:bg-gray-200 dark:text-gray-800 hover:bg-gray-700 hover:text-white dark:hover:bg-gray-300" type="button" value="Logout" id="button-logout">
           </div> 
         <% } %>
     </nav>

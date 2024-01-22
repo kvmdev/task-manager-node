@@ -3,6 +3,6 @@ const mysql = require('mysql2/promise');
 module.exports = mysql.createPool({
     host: "localhost",
     user: "root",
-    password: "",
+    password: "6294862",
     database: "task_manager_db"
 });
