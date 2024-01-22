@@ -1,3 +1,4 @@
+const { Task } = require("../models/Task");
 const { User } = require("../models/User");
 
 class PagesController {
@@ -10,6 +11,22 @@ class PagesController {
                 res.render("index", { users: users, isAuthenticated: req.session.isAuthenticated });
             } else {
                 res.render("index", { users: [], isAuthenticated: req.session.isAuthenticated });
+            }
+        } catch (e) {
+            console.error("Error:", e);
+            res.status(500).send("Internal server error");
+        }
+    }
+
+    static async getAllTasks(req, res) {
+        try {
+            console.log("Route - isAuthenticated:", req.session.isAuthenticated);
+
+            if (req.session.isAuthenticated) {
+                const tasks = await Task.getAllTasks(req.session.user.id);
+                res.render("index", { tasks, isAuthenticated: req.session.isAuthenticated });
+            } else {
+                res.render("index", { tasks: [], isAuthenticated: req.session.isAuthenticated });
             }
         } catch (e) {
             console.error("Error:", e);
@@ -45,6 +62,10 @@ class PagesController {
 
     static registerPage(req, res) {
         res.render("register", { isAuthenticated: req.session.isAuthenticated });
+    }
+
+    static createTaskPage(req, res) {
+        res.render("create-task", { isAuthenticated: req.session.isAuthenticated });
     }
 }
 

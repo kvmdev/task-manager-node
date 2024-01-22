@@ -110,6 +110,7 @@ class UserController {
                 
                 if(isMatch) {
                     const userToToken = {
+                        id: user[0].id,
                         name: user[0].name,
                         isAdmin: user[0].isAdmin
                     };
@@ -117,6 +118,7 @@ class UserController {
                     const token = createToken(userToToken);
 
                     req.session.isAuthenticated = true;
+                    req.session.user = userToToken;
                     res.json({ token });
                 } else {
                     req.session.isAuthenticated = false;

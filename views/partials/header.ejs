@@ -1,47 +1,71 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Express</title>
-    <link rel="stylesheet" href="/styles/styles.css"> 
-    <script src="https://cdn.tailwindcss.com"></script> 
-    <style>
-      h1:hover {
-        cursor: pointer;
-      }
-    </style>
-    <script>
-      document.addEventListener("DOMContentLoaded", (e)=> {
-        const buttonLogout = document.querySelector("#button-logout");
-        buttonLogout.addEventListener("click", async ()=> {
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Express</title>
+  <link rel="stylesheet" href="/styles/styles.css">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    h1:hover {
+      cursor: pointer;
+    }
+  </style>
+  <script>
+    document.addEventListener("DOMContentLoaded", (e) => {
+      const buttonLogout = document.querySelector("#button-logout");
+      const buttonTask = document.querySelector("#button-task");
+
+      buttonTask.addEventListener("click", ()=> {
+        window.location.href = "/task";
+      });
+
+      buttonLogout.addEventListener("click", async () => {
+        try {
           const response = await fetch("/logout");
           const data = await response.json();
-          if(response.ok) {
+          if (response.ok) {
             window.location.href = "/";
           } else {
             alert("Couldn`t delete session");
             console.log(data);
           }
-        });
+        } catch (e) {
+          console.log("Server error");
+        }
       });
-    </script>
+    });
+  </script>
 </head>
+
 <body>
-    <nav class="top-0 flex items-center justify-between p-6 bg-white dark:bg-gray-800" id="nav">
-        <a href="/"><h1 class="text-2xl font-bold text-gray-800 dark:text-gray-200">Task Manager</h1></a>
-        <% if(!isAuthenticated) { %> 
-          <div class="space-x-4">
-            <button class="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 h-10 px-4 py-2 bg-transparent border border-gray-800 dark:border-gray-200 text-gray-800 dark:text-gray-200 hover:bg-gray-800 hover:text-white dark:hover:bg-gray-200 dark:hover:text-gray-800" data-method="/login">
-              Log In
-            </button>
-            <button class="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 h-10 px-4 py-2 bg-gray-800 text-white dark:bg-gray-200 dark:text-gray-800 hover:bg-gray-700 hover:text-white dark:hover:bg-gray-300" data-method="/register">
-              Register
-            </button>
-          </div>
-        <%  } else { %>
-          <div class="space-x-4">
-            <input class="inline-flex items-center justify-center rounded-md text-sm text-center font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 h-10 px-4 py-2 bg-gray-800 text-white dark:bg-gray-200 dark:text-gray-800 hover:bg-gray-700 hover:text-white dark:hover:bg-gray-300" type="button" value="Logout" id="button-logout">
-          </div> 
+  <nav class="top-0 absolute w-full flex items-center justify-between p-6 bg-white dark:bg-gray-800" id="nav">
+    <a href="/">
+      <h1 class="text-2xl font-bold text-gray-800 dark:text-gray-200">Task Manager</h1>
+    </a>
+    <% if(!isAuthenticated) { %>
+      <div class="space-x-4">
+        <button
+          class="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 h-10 px-4 py-2 bg-transparent border border-gray-800 dark:border-gray-200 text-gray-800 dark:text-gray-200 hover:bg-gray-800 hover:text-white dark:hover:bg-gray-200 dark:hover:text-gray-800"
+          data-method="/login">
+          Log In
+        </button>
+        <button
+          class="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 h-10 px-4 py-2 bg-gray-800 text-white dark:bg-gray-200 dark:text-gray-800 hover:bg-gray-700 hover:text-white dark:hover:bg-gray-300"
+          data-method="/register">
+          Register
+        </button>
+      </div>
+      <% } else { %>
+        
+        <div class="space-x-4">
+          <input
+            class="inline-flex items-center justify-center rounded-md text-sm text-center font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 h-10 px-4 py-2 bg-gray-800 text-white dark:bg-gray-200 dark:text-gray-800 hover:bg-gray-700 hover:text-white dark:hover:bg-gray-300"
+            type="button" value="Logout" id="button-logout">
+            <input
+            class="inline-flex items-center justify-center rounded-md text-sm text-center font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 h-10 px-4 py-2 bg-gray-800 text-white dark:bg-gray-200 dark:text-gray-800 hover:bg-gray-700 hover:text-white dark:hover:bg-gray-300"
+            type="button" value="Create Task" id="button-task">
+        </div>
         <% } %>
-    </nav>
+  </nav>
