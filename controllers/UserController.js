@@ -57,12 +57,14 @@ class UserController {
                 
                 const data = {
                     name: user[0].name,
-                    isAdmin: user[0].isAdmin
+                    isAdmin: user[0].isAdmin,
+                    id: user[0].id
                 };
 
                 const token = createToken(data);
 
                 req.session.isAuthenticated = true;
+                req.session.user = data;
                 res.status(201).json({ token });
             } else {
                 res.status(404).send("User not created");
