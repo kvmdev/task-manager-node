@@ -27,6 +27,11 @@ app.set("views", path.join(__dirname, "views"));
 
 app.use("/", require("./routes/pages"));
 app.use("/api/users", require("./routes/users"));
+app.use("/api/tasks", require("./routes/tasks"));
+
+app.use((req, res)=> {
+    res.status(404).send("Not found page");
+});
 
 app.listen(3000, () => {
     console.log('Server listening on port 3000');
