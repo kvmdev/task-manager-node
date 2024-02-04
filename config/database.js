@@ -4,5 +4,5 @@ module.exports = mysql.createPool({
     host: "localhost",
     user: "root",
     password: "6294862",
-    database: "task_manager_db"
+    database: "task-manager-db"
 });
