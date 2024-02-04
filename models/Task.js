@@ -17,11 +17,11 @@ class Task {
         }
     }
 
-    static async createUser({ title, note }) {
+    static async createTask({ title, note, id }) {
         try {
             const connection = await pool.getConnection();
             try {
-                const [rows] = await connection.query("INSERT INTO users (name, password) VALUES (?, ?)", [name, password]);
+                const [rows] = await connection.query("INSERT INTO tasks(title, note, user_id) VALUES (?, ?, ?)", [title, note, id]);
                 return rows;
             } catch (e) {
                 throw e;
