@@ -34,26 +34,26 @@ class PagesController {
         }
     }
 
-    
+
     static async logout(req, res) {
         try {
             req.session.destroy();
-            res.json({message: "Session destroyed succesfully"});
-        } catch(e) {
-            res.status(500).json({ message: "Error destroying session"});
+            res.json({ message: "Session destroyed succesfully" });
+        } catch (e) {
+            res.status(500).json({ message: "Error destroying session" });
         }
     }
 
     static createUserPage(req, res) {
-        res.render("create");
+        if(req.session.isAuthenticated) {
+            res.render("create");
+        } else {
+            res.status(404).send("Not logged");
+        }
     }
 
     static updateUserPage(req, res) {
         res.render("update");
-    }
-
-    static deleteUserPage(req, res) {
-        res.render("delete");
     }
 
     static loginPage(req, res) {
@@ -65,7 +65,11 @@ class PagesController {
     }
 
     static createTaskPage(req, res) {
-        res.render("create-task", { isAuthenticated: req.session.isAuthenticated });
+        if (req.session.isAuthenticated) {
+            res.render("create-task", { isAuthenticated: req.session.isAuthenticated });
+        } else {
+            res.redirect("/login");
+        }
     }
 }
 
