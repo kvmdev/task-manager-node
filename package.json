@@ -5,7 +5,7 @@
     "express": "^4.18.2",
     "express-session": "^1.17.3",
     "jsonwebtoken": "^9.0.2",
-    "mysql2": "^3.6.5"
+    "pg": "^8.11.3"
   },
   "name": "task-manager-node",
   "version": "1.0.0",
@@ -17,5 +17,8 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "description": ""
+  "description": "",
+  "devDependencies": {
+    "https": "^1.0.0"
+  }
 }

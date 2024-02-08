@@ -2,6 +2,7 @@ const express = require('express');
 const app = express();
 const path = require("path");
 const session = require("express-session");
+const pool = require("./config/database");
 
 app.use(express.json());
 
@@ -29,7 +30,7 @@ app.use("/", require("./routes/pages"));
 app.use("/api/users", require("./routes/users"));
 app.use("/api/tasks", require("./routes/tasks"));
 
-app.use((req, res)=> {
+app.use((req, res) => {
     res.status(404).send("Not found page");
 });
 

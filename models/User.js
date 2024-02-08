@@ -4,10 +4,10 @@ class User {
 
     static async getAllUsers() {
         try {
-            const connection = await pool.getConnection();
+            const connection = await pool.connect();
             try {
-                const [rows] = await connection.query("SELECT * FROM users");
-                return rows;
+                const result = await connection.query("SELECT * FROM users");
+                return result;
             } catch (e) {
                 throw e;
             } finally {
@@ -20,10 +20,10 @@ class User {
 
     static async getUserById(id) {
         try {
-            const connection = await pool.getConnection();
+            const connection = await pool.connect();
             try {
-                const [rows] = await connection.query("SELECT * FROM users WHERE id = ?", [id]);
-                return rows;
+                const result = await connection.query("SELECT * FROM users WHERE id = $1", [id]);
+                return result;
             } catch (e) {
                 throw e;
             } finally {
@@ -52,11 +52,11 @@ class User {
     static async getUserByUserName({ name }) {
         console.log(name);
         try {
-            const connection = await pool.getConnection();
+            const connection = await pool.connect();
             try {
-                const sql = "SELECT * FROM users WHERE name = ?";
-                const [rows] = await connection.query(sql, [name]);
-                return rows;
+                const sql = "SELECT * FROM users WHERE name = $1";
+                const result = await connection.query(sql, [name]);
+                return result;
             } catch (e) {
                 throw e;
             } finally {
@@ -69,10 +69,10 @@ class User {
 
     static async createUser({ name, password }) {
         try {
-            const connection = await pool.getConnection();
+            const connection = await pool.connect();
             try {
-                const [rows] = await connection.query("INSERT INTO users (name, password) VALUES (?, ?)", [name, password]);
-                return rows;
+                const result = await connection.query("INSERT INTO users (name, password) VALUES ($1, $2)", [name, password]);
+                return result;
             } catch (e) {
                 throw e;
             } finally {
@@ -85,11 +85,11 @@ class User {
 
     static async updateUser({ id, name, password }) {
         try {
-            const connection = await pool.getConnection();
+            const connection = await pool.connect();
             try {
-                const sql = "UPDATE users SET name = ?, password = ? WHERE id = ?";
-                const [rows] = await connection.query(sql, [name, password, id]);
-                return rows;
+                const sql = "UPDATE users SET name = $1, password = $2 WHERE id = $3";
+                const result = await connection.query(sql, [name, password, id]);
+                return result;
             } catch (e) {
                 throw e;
             } finally {
@@ -102,11 +102,11 @@ class User {
 
     static async deleteUser(id) {
         try {
-            const connection = await pool.getConnection();
+            const connection = await pool.connect();
             try {
-                const sql = "DELETE FROM users WHERE id = ?";
-                const [rows] = await connection.query(sql, [id]);
-                return rows;
+                const sql = "DELETE FROM users WHERE id = $1";
+                const result = await connection.query(sql, [id]);
+                return result;
             } catch (e) {
                 throw e;
             }

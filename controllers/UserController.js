@@ -6,8 +6,8 @@ class UserController {
         try {
             const users = await User.getAllUsers();
 
-            if (users.length > 0) {
-                res.status(200).json(users);
+            if (users.rows.length > 0) {
+                res.status(200).json({users: users.rows});
             } else {
                 res.status(404).send("No users found");
             }
@@ -21,8 +21,8 @@ class UserController {
         const { id } = req.params;
         try {
             const user = await User.getUserById(id);
-            if (user.length > 0) {
-                res.status(200).json(user);
+            if (user.rows.length > 0) {
+                res.status(200).json({user: user.rows});
             } else {
                 res.status(404).send("User not found");
             }
@@ -36,9 +36,9 @@ class UserController {
         /* console.log(name); */
         try {
             const user = await User.generalGetUser({ name });
-            if (user.length > 0) {
+            if (user.rows.length > 0) {
                 console.log(JSON.stringify(user));
-                res.status(200).json(user);
+                res.status(200).json({user: user.rows});
             } else {
                 res.status(404).send("Not found");
             }
@@ -52,7 +52,7 @@ class UserController {
             let { name, password } = req.body;
             password = await hashPassword(password);
             const createdUser = await User.createUser({ name, password });
-            if (createdUser.affectedRows > 0) {
+            if (createdUser.rowCount > 0) {
                 const user = await User.getUserByUserName({ name });
                 
                 const data = {
@@ -67,10 +67,10 @@ class UserController {
                 req.session.user = data;
                 res.status(201).json({ token });
             } else {
-                res.status(404).send("User not created");
+                res.status(404).json({message: "User not created"});
             }
         } catch (e) {
-            res.status(500).send("Internal server error");
+            res.status(500).json({message: "Internal server error"});
         }
     }
 
@@ -78,7 +78,7 @@ class UserController {
         const { id, name, password } = req.body;
         try {
             const user = await User.updateUser({ id, name, password });
-            if (user.affectedRows > 0) {
+            if (user.rowCount > 0) {
                 res.status(200).send("User updated");
             } else {
                 res.status(404).send("User not updated");
@@ -92,7 +92,7 @@ class UserController {
         const { id } = req.body;
         try {
             const user = await User.deleteUser(id);
-            if (user.affectedRows > 0) {
+            if (user.rowCount > 0) {
                 res.status(200).send("User deleted");
             } else {
                 res.status(404).send("User not deleted");
@@ -107,7 +107,7 @@ class UserController {
             const { name, password } = req.body;
             const user = await User.getUserByUserName({ name });
             
-            if(user.length > 0) {
+            if(user.rows.length > 0) {
                 const isMatch = await comparePassword(password, user[0].password);
                 
                 if(isMatch) {

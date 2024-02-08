@@ -24,7 +24,7 @@ class PagesController {
 
             if (req.session.isAuthenticated) {
                 const tasks = await Task.getAllTasks(req.session.user.id);
-                res.render("index", { tasks, isAuthenticated: req.session.isAuthenticated });
+                res.render("index", { tasks: tasks.rows, isAuthenticated: req.session.isAuthenticated });
             } else {
                 res.render("index", { tasks: [], isAuthenticated: req.session.isAuthenticated });
             }
