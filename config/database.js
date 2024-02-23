@@ -1,9 +1,9 @@
-const { Pool } = require("pg");
+require("dotenv").config();
+const mongoose = require("mongoose");
+const uri = process.env.MONGODB_URL;
 
-module.exports = new Pool({
-    host: "ep-super-lab-a5etzyxx.us-east-2.aws.neon.fl0.io",
-    user: "fl0user",
-    password: "KDgWYB1cuAP5",
-    database: "task-manager-db",
-    port: 5432
+mongoose.connect(uri).then(()=> {
+    console.log("Database on uri", uri);
+}).catch(err => {
+    console.log(err);
 });

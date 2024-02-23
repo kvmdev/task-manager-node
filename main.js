@@ -1,25 +1,25 @@
+require("./config/database");
 const express = require('express');
 const app = express();
 const path = require("path");
 const session = require("express-session");
-const pool = require("./config/database");
 
 app.use(express.json());
 
 app.use(session({
     secret: "6294862",
     resave: true,
-    saveUninitialized: true,
-    cookie: { secure: false, maxAge: 3600000 } // Adjust as needed
+    saveUninitialized: true/* ,
+    cookie: { secure: false, maxAge: 3600000 } */ // Adjust as needed
 }));
 
-app.use((req, res, next) => {
+/* app.use((req, res, next) => {
     if (req.session.isAuthenticated === undefined) {
         req.session.isAuthenticated = false;
     }
     next();
-});
-
+   
+}); */
 
 app.use(express.static(path.join(__dirname, "public")));
 

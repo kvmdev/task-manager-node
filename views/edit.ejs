@@ -1,0 +1,91 @@
+<%- include ("partials/header.ejs", { isAuthenticated: isAuthenticated }) %>
+
+<div class="w-full h-screen flex justify-center items-center">
+    <form class="grid w-full max-w-md gap-4 " id="form">
+        <div class="space-y-2">
+            <label
+                class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                for="task-title">
+                Task Title
+            </label>
+            <input
+                class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                id="task-title" placeholder="Enter task title" value="<%= title %>" required />
+        </div>
+        <div class="space-y-2">
+            <label
+                class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                for="task-description">
+                Task Description
+            </label>
+            <textarea
+                class="flex w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 min-h-[100px]"
+                id="task-description" placeholder="Enter task description" required><%= note  %></textarea>
+        </div>
+        <p id="message" class="text-center font-bold hidden">Task Created Successfully</p>
+        <button
+            class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2"
+            type="submit">
+            Update task
+        </button>
+    </form>
+</div>
+
+<script>
+    const $ = (e) => {
+        return document.getElementById(e);
+    }
+    const title = $("task-title");
+    const description = $("task-description");
+    const form = $("form");
+    const message = $("message");
+    let appears = false;
+
+    
+
+    form.addEventListener("submit", (e) => {
+        e.preventDefault();
+
+        const [_,__,id] = window.location.pathname.split("/");
+
+        fetch("/api/tasks/" + id, {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ title: title.value, note: description.value })
+        }).then(res => {
+            if (res.ok) {
+                if (!appears) {
+                    message.classList.remove("hidden");
+                    message.textContent = "Created Successfully";
+                    message.classList.add("show", "success");
+                    appears = true;
+                } else {
+                    message.textContent = "Created Successfully";
+                }
+                window.location.href = "/";
+            } else {
+                if (!appears) {
+                    message.classList.remove("hidden");
+                    message.textContent = "Couldn`t create task";
+                    message.classList.add("show", "error");
+                    appears = true;
+                } else {
+                    message.textContent = "Couldn`t create task";
+                }
+            }
+        }).catch(e => {
+            if (!appears) {
+                message.classList.remove("hidden");
+                message.textContent = "Internal server error";
+                message.classList.add("show", "error");
+                appears = true;
+            } else {
+                message.textContent = "Internal server error";
+            }
+        })
+    });
+</script>
+
+<%- include("partials/footer.ejs") %>

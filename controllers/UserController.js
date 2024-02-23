@@ -1,10 +1,10 @@
 const { hashPassword, comparePassword, createToken } = require("../middlewares/authMiddleware");
-const { User } = require("../models/User");
+const User = require("../models/User");
 
 class UserController {
     static async getAllUsers(req, res) {
         try {
-            const users = await User.getAllUsers();
+            const users = await User.find();
 
             if (users.rows.length > 0) {
                 res.status(200).json({users: users.rows});
@@ -51,24 +51,22 @@ class UserController {
         try {
             let { name, password } = req.body;
             password = await hashPassword(password);
-            const createdUser = await User.createUser({ name, password });
-            if (createdUser.rowCount > 0) {
-                const user = await User.getUserByUserName({ name });
-                
-                const data = {
-                    name: user[0].name,
-                    isAdmin: user[0].isAdmin,
-                    id: user[0].id
+
+            const user = new User({ name, password });
+
+            const saved = await user.save();
+
+            if (saved) {
+                const data = { 
+                    id: saved["_id"],
+                    name: saved.name,
+                    password: saved.password
                 };
-
                 const token = createToken(data);
-
                 req.session.isAuthenticated = true;
-                req.session.user = data;
-                res.status(201).json({ token });
-            } else {
-                res.status(404).json({message: "User not created"});
+                res.status(201).json(token);
             }
+ 
         } catch (e) {
             res.status(500).json({message: "Internal server error"});
         }
@@ -105,27 +103,29 @@ class UserController {
     static async login(req, res) {
         try {
             const { name, password } = req.body;
-            const user = await User.getUserByUserName({ name });
+            const user = await User.findOne({ name });
             
-            if(user.rows.length > 0) {
-                const isMatch = await comparePassword(password, user[0].password);
-                
-                if(isMatch) {
-                    const userToToken = {
-                        id: user[0].id,
-                        name: user[0].name,
-                        isAdmin: user[0].isAdmin
-                    };
+            if(user) {
+                const isMatch = await comparePassword(password, user.password);
 
-                    const token = createToken(userToToken);
+                    if(isMatch) {
+                        
+                        const userToToken = {
+                            id: user["_id"],
+                            name: user.name,
+                            isAdmin: user.isAdmin
+                        };
+    
+                        const token = createToken(userToToken);
+    
+                        req.session.isAuthenticated = true;
+                        req.session.user = userToToken;
+                        res.json({ token });
 
-                    req.session.isAuthenticated = true;
-                    req.session.user = userToToken;
-                    res.json({ token });
-                } else {
-                    req.session.isAuthenticated = false;
-                    res.status(401).json({message: "Invalid credentials"});
-                }
+                    } else {
+                        res.status(403).json({message: ""});
+                    }
+
             } else {
                 req.session.isAuthenticated = false;
                 res.status(404).json({message: "User not found"});

@@ -36,12 +36,12 @@
             }
         }).then(response => {
             if (response.ok) {
-                /* window.location.href = "/"; */
                 message.textContent = "Created successfully";
                 message.classList.remove("error");
                 message.classList.add("show", "success");
                 name.value = "";
                 password.value = "";
+
             } else {
                 message.textContent = "Error creating user";
                 message.classList.remove("success");

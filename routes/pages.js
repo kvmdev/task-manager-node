@@ -8,5 +8,6 @@ router.get("/login", PagesController.loginPage);
 router.get("/logout", PagesController.logout);
 router.get("/register", PagesController.registerPage);
 router.get("/task", PagesController.createTaskPage);
+router.get("/edit/:id", PagesController.editTaskForId);
 
 module.exports = router;

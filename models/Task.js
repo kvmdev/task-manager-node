@@ -1,37 +1,19 @@
-const pool = require("../config/database");
+const { Schema, model } = require("mongoose");
 
-class Task {
-    static async getAllTasks(id) {
-        try {
-            const connection = await pool.connect();
-            try {
-                const result = await connection.query("SELECT * FROM tasks WHERE user_id = $1", [id]);
-                return result;
-            } catch (e) {
-                throw e;
-            } finally {
-                connection.release();
-            }
-        } catch (e) {
-            throw e;
-        }
+const Task = new Schema({
+    title: {
+        type: String,
+        required: true
+    },
+    note: {
+        type: String,
+        required: true
+    },
+    user_id: {
+        type: Schema.Types.ObjectId,
+        ref: "User",
+        required: true
     }
+});
 
-    static async createTask({ title, note, id }) {
-        try {
-            const connection = await pool.connect();
-            try {
-                const result = await connection.query("INSERT INTO tasks(title, note, user_id) VALUES ($1, $2, $3)", [title, note, id]);
-                return result;
-            } catch (e) {
-                throw e;
-            } finally {
-                connection.release();
-            }
-        } catch (e) {
-            throw e;
-        }
-    }
-}
-
-module.exports = { Task };
+module.exports = model("Task", Task);

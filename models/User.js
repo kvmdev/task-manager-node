@@ -1,6 +1,29 @@
-const pool = require("../config/database");
+const { Schema, model } = require("mongoose");
 
-class User {
+const User = new Schema({
+    name: {
+        type: String,
+        required: true
+    },
+    password: {
+        type: String,
+        required: true
+    },
+    isAdmin: {
+        type: Boolean,
+        required: true,
+        default: false
+    },
+    tasks: {
+        type: Array,
+        required: true,
+        default: []
+    }
+});
+
+module.exports = model("User", User);
+
+/* class User {
 
     static async getAllUsers() {
         try {
@@ -35,7 +58,6 @@ class User {
     }
 
     static async generalGetUser({ name }) {
-        /* console.log(name); */
         try {
             if (name !== undefined) {
                 const user = await User.getUserByUserName({ name });
@@ -115,6 +137,4 @@ class User {
         }
     }
 
-}
-
-module.exports = { User };
+} */
